@@ -1,4 +1,8 @@
+import { useState, useEffect } from "react";
+import LocationInput from "./LocationInput";
 import {
+  Flex,
+  Button,
   Text,
   Modal,
   ModalOverlay,
@@ -7,18 +11,39 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  // Input,
-  // Textarea
+  Input,
+  Textarea,
 } from "@chakra-ui/react";
 
 import "./editProfileModal.css";
 
 type props = {
+  user: any;
   modalOpen: boolean;
   setModalOpen: (modalOpen: boolean) => void;
 };
 
-const EditProfileModal = ({ modalOpen, setModalOpen }: props) => {
+const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
+  const [profileCompletion, setProfileCompletion] = useState<number>(0);
+
+  // calculating how much of a user's profile is complete based on number of
+  // completed form inputs
+  const calculateProfileCompletion = (userInfo: any) => {
+    const userAttributes = ["name", "email", "classes", "location", "about"];
+    const attributesCompleted = userAttributes.filter((attr) => {
+      return Array.isArray(userInfo[attr])
+        ? userInfo[attr].length > 0
+        : !!userInfo[attr];
+    });
+    const percentComplete =
+      (attributesCompleted.length / userAttributes.length) * 100;
+    setProfileCompletion(percentComplete);
+  };
+
+  useEffect(() => {
+    calculateProfileCompletion(user);
+  }, []);
+
   return (
     <>
       <Modal
@@ -31,7 +56,49 @@ const EditProfileModal = ({ modalOpen, setModalOpen }: props) => {
           <ModalHeader>Edit profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>This is the modal text!</Text>
+            <Text
+              className={
+                profileCompletion < 100
+                  ? "profileIncomplete"
+                  : "profileComplete"
+              }
+            >
+              Profile: {profileCompletion}% complete
+            </Text>
+            <form className="profileUserInfoForm">
+              <Flex className="profileUserInfoContainer">
+                <Text>Name:</Text>
+                <Input
+                  id="name"
+                  defaultValue={user.name}
+                  placeholder="Name"
+                  isReadOnly={true}
+                />
+              </Flex>
+
+              <Flex className="profileUserInfoContainer">
+                <Text>Location:</Text>
+                <LocationInput currentLocation={user.location} />
+              </Flex>
+              <Flex className="profileUserInfoContainer">
+                <Text>About me:</Text>
+                <Textarea
+                  id="about"
+                  defaultValue={user.about}
+                  placeholder="Bio"
+                />
+              </Flex>
+              <Flex className="profileUserInfoContainer">
+                <Text>My classes:</Text>
+                <Flex className="profileMyClasses">
+                  {user.classes.map((eachClass: string, index: number) => (
+                    <Text key={index} className="profileEachClass">
+                      {eachClass}
+                    </Text>
+                  ))}
+                </Flex>
+              </Flex>
+            </form>
           </ModalBody>
 
           <ModalFooter>

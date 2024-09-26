@@ -27,22 +27,6 @@ import "./profile.css";
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  // const [profileCompletion, setProfileCompletion] = useState<number>(0);
-
-  // // calculating how much of a user's profile is complete based on number of
-  // // completed form inputs
-  // const calculateProfileCompletion = (userInfo: any) => {
-  //   const userAttributes = ["name", "email", "classes", "location", "about"];
-  //   const attributesCompleted = userAttributes.filter((attr) => {
-  //     return Array.isArray(userInfo[attr])
-  //       ? userInfo[attr].length > 0
-  //       : !!userInfo[attr];
-  //   });
-
-  //   const percentComplete =
-  //     (attributesCompleted.length / userAttributes.length) * 100;
-  //   setProfileCompletion(percentComplete);
-  // };
 
   // checking for user locally -> need to add user object to recoil or redux store
   // when logging in and then pull down to this component later
@@ -54,7 +38,6 @@ const Profile = () => {
         await getDocs(q).then((querySnapshot) => {
           const userDoc = querySnapshot.docs[0];
           const userInfo = userDoc.data();
-          // calculateProfileCompletion(userInfo);
           setUser(userInfo);
         });
       }
@@ -66,13 +49,6 @@ const Profile = () => {
     <Flex className="profileContainer">
       {user && (
         <>
-          {/* <Text
-            className={
-              profileCompletion < 100 ? "profileIncomplete" : "profileComplete"
-            }
-          >
-            Profile: {profileCompletion}% complete
-          </Text> */}
           <Flex className="profileHeaderContainer">
             <Flex className="profileHeaderSubContainer">
               <Text>{user.name}</Text>
@@ -94,36 +70,11 @@ const Profile = () => {
               </Text>
             ))}
           </Flex>
-          {/* <form className="profileUserInfoForm">
-            <Flex className="profileUserInfoContainer">
-              <Text>Name:</Text>
-              <Input id="name" defaultValue={user.name} placeholder="Name" isReadOnly={true} />
-            </Flex>
-
-            <Flex className="profileUserInfoContainer">
-              <Text>Location:</Text>
-              <LocationInput currentLocation={user.location} />
-            </Flex>
-            <Flex className="profileUserInfoContainer">
-              <Text>About me:</Text>
-              <Textarea
-                id="about"
-                defaultValue={user.about}
-                placeholder="Bio"
-              />
-            </Flex>
-            <Flex className="profileUserInfoContainer">
-              <Text>My classes:</Text>
-              <Flex className="profileMyClasses">
-                {user.classes.map((eachClass: string, index: number) => (
-                  <Text key={index} className="profileEachClass">
-                    {eachClass}
-                  </Text>
-                ))}
-              </Flex>
-            </Flex>
-          </form> */}
-          <EditProfileModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+          <EditProfileModal
+            user={user}
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+          />
         </>
       )}
     </Flex>
