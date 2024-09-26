@@ -1,5 +1,5 @@
 // third party imports (anything not made by us) always on top
-import React from "react";
+// import React from "react";
 
 // any components made by us second
 import { Example2 } from "../index";
