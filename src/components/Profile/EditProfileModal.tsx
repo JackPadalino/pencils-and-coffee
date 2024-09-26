@@ -68,12 +68,7 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
             <form className="profileUserInfoForm">
               <Flex className="profileUserInfoContainer">
                 <Text>Name:</Text>
-                <Input
-                  id="name"
-                  defaultValue={user.name}
-                  placeholder="Name"
-                  isReadOnly={true}
-                />
+                <Input id="name" defaultValue={user.name} placeholder="Name" />
               </Flex>
 
               <Flex className="profileUserInfoContainer">
