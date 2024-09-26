@@ -56,11 +56,14 @@ const Register = () => {
       // add a new document with a generated id
       const newUserRef = doc(collection(db, "users"));
       const newUserData = {
-        name: formData.name,
-        email: formData.email,
         about: "",
-        location: "",
+        backgroundPhoto: "",
         classes: [],
+        email: formData.email,
+        headline: "",
+        location: "",
+        name: formData.name,
+        photo: "",
       };
       await setDoc(newUserRef, newUserData);
       navigate("/profile");
