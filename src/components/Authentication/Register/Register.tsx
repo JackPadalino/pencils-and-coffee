@@ -16,6 +16,7 @@ type Register = {
   confirmPassword: string;
 };
 
+// register component - new users sign up with this form
 const Register = () => {
   const navigate = useNavigate();
   // const [errorMessage, setErrorMessage] = useState<string>("");

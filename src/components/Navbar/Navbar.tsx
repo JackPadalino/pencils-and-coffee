@@ -7,9 +7,11 @@ import "./navbar.css";
 
 import { Flex } from "@chakra-ui/react";
 
+// navbar component - displayed at top of each page
 const Navbar = () => {
   const [signedIn, setSignedIn] = useState<boolean>(false);
 
+  // listen for new user signed in
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setSignedIn(true);

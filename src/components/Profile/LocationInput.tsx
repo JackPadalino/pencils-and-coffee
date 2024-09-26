@@ -17,6 +17,9 @@ type LocationInputProps = {
   currentLocation: any;
 };
 
+// Google maps autocomplete location input - this component uses
+// the Google Maps API to create an autocomplete input. As the user
+// types their location, Google Maps displays suggested locations
 const LocationInput = ({ currentLocation }: LocationInputProps) => {
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_PLACES_API_KEY!}>

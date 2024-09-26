@@ -25,6 +25,7 @@ type Login = {
   password: string;
 };
 
+// login component - user logs in to the application here
 const Login = () => {
   // const [errorMessage, setErrorMessage] = useState<string>("");
 

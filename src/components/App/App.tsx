@@ -14,6 +14,8 @@ import {
 import { Flex } from "@chakra-ui/react";
 import "./app.css";
 
+// here is the root component containing all the routes for the application
+// each route has a path and a component to be rendered on that route
 const App = () => {
   return (
     <Flex className="appContainer">

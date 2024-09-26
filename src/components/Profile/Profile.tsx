@@ -8,10 +8,14 @@ import LocationInput from "./LocationInput";
 import { Flex, Text, Input, Textarea } from "@chakra-ui/react";
 import "./profile.css";
 
+// user profile component - a user can view/edit their personal information
+// here
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
   const [profileCompletion, setProfileCompletion] = useState<number>(0);
 
+  // calculating how much of a user's profile is complete based on number of
+  // completed form inputs
   const calculateProfileCompletion = (userInfo: any) => {
     const userAttributes = ["name", "email", "classes", "location", "about"];
     const attributesCompleted = userAttributes.filter((attr) => {
@@ -27,7 +31,6 @@ const Profile = () => {
 
   // checking for user locally -> need to add user object to recoil or redux store
   // when logging in and then pull down to this component later
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firestoreUser) => {
       if (firestoreUser) {

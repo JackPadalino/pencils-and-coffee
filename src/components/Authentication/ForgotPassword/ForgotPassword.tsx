@@ -11,6 +11,8 @@ type ForgotPasswordProps = {
   email: string;
 };
 
+// forgot password component - user enters their email to receive
+// a 'reset password' email from Firebase
 const ForgotPassword = () => {
   // const [errorMessage, setErrorMessage] = useState<string>("");
 

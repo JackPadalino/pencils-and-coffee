@@ -1,3 +1,4 @@
+// index for all app components
 import App from "./App/App";
 import Navbar from "./Navbar/Navbar";
 import Home from "./Home/Home";

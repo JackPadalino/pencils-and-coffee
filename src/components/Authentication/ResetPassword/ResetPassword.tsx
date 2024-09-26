@@ -10,6 +10,9 @@ type ResetPasswordProps = {
   confirmPassword: string;
 };
 
+// reset password component - after the user has received their
+// 'reset password' email they are directed to this component via
+// a link. Here they enter a new password.
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ResetPasswordProps>({
