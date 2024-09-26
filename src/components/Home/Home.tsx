@@ -4,7 +4,7 @@ import "./home.css";
 const Home = () => {
   return (
     <Flex className="homeContainer">
-      <Text>Home</Text>
+      <Text>Pencils & Coffee</Text>
     </Flex>
   );
 };
