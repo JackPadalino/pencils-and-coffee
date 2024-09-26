@@ -51,17 +51,28 @@ const Profile = () => {
     <Flex className="profileContainer">
       {user && (
         <>
-          <Text
+          {/* <Text
             className={
               profileCompletion < 100 ? "profileIncomplete" : "profileComplete"
             }
           >
             Profile: {profileCompletion}% complete
-          </Text>
-          <form className="profileUserInfoForm">
+          </Text> */}
+          <Text>{user.name}</Text>
+          <Text>{user.headline}</Text>
+          <Text>{user.location}</Text>
+          <Text>{user.about}</Text>
+          <Flex className="profileMyClasses">
+            {user.classes.map((eachClass: string, index: number) => (
+              <Text key={index} className="profileEachClass">
+                {eachClass}
+              </Text>
+            ))}
+          </Flex>
+          {/* <form className="profileUserInfoForm">
             <Flex className="profileUserInfoContainer">
               <Text>Name:</Text>
-              <Input id="name" defaultValue={user.name} placeholder="Name" />
+              <Input id="name" defaultValue={user.name} placeholder="Name" isReadOnly={true} />
             </Flex>
 
             <Flex className="profileUserInfoContainer">
@@ -86,7 +97,7 @@ const Profile = () => {
                 ))}
               </Flex>
             </Flex>
-          </form>
+          </form> */}
         </>
       )}
     </Flex>
