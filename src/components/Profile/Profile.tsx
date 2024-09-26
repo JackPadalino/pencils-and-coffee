@@ -5,7 +5,16 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import LocationInput from "./LocationInput";
 
-import { Flex, Text, Input } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Input,
+  HStack,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Textarea,
+} from "@chakra-ui/react";
 import "./profile.css";
 
 const Profile = () => {
@@ -31,7 +40,6 @@ const Profile = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firestoreUser) => {
       if (firestoreUser) {
-        console.log("a user signed in");
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("email", "==", firestoreUser.email));
         await getDocs(q).then((querySnapshot) => {
@@ -57,17 +65,32 @@ const Profile = () => {
             Profile: {profileCompletion}% complete
           </Text>
           <form className="profileUserInfoForm">
-            <Flex>
+            <Flex className="profileUserInfoContainer">
+              <Text>Name:</Text>
               <Input id="name" defaultValue={user.name} placeholder="Name" />
             </Flex>
-            <Flex>
-              <Input id="email" defaultValue={user.email} placeholder="Email" />
-            </Flex>
-            <Flex>
+
+            <Flex className="profileUserInfoContainer">
+              <Text>Location:</Text>
               <LocationInput currentLocation={user.location} />
             </Flex>
-            <Flex>
-              <Input id="about" defaultValue={user.about} placeholder="Bio" />
+            <Flex className="profileUserInfoContainer">
+              <Text>About me:</Text>
+              <Textarea
+                id="about"
+                defaultValue={user.about}
+                placeholder="Bio"
+              />
+            </Flex>
+            <Flex className="profileUserInfoContainer">
+              <Text>My classes:</Text>
+              <Flex className="profileMyClasses">
+                {user.classes.map((eachClass: string, index: number) => (
+                  <Text key={index} className="profileEachClass">
+                    {eachClass}
+                  </Text>
+                ))}
+              </Flex>
             </Flex>
           </form>
         </>

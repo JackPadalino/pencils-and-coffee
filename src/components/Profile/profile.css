@@ -1,13 +1,22 @@
 /* breakpoint for mobile portrait view */
 @media only screen and (max-width: 600px) {
+  .profileUserInfoForm {
+    width: 50%;
+  }
 }
 
 /* breakpoint for mobile landscape view */
 @media only screen and (min-width: 600px) and (max-width: 1280px) {
+  .profileUserInfoForm {
+    width: 50%;
+  }
 }
 
 /* breakpoint for laptop/desktop view */
 @media only screen and (min-width: 1280px) {
+  .profileUserInfoForm {
+    width: 25%;
+  }
 }
 
 /* css for all views  */
@@ -18,7 +27,24 @@
 .profileUserInfoForm {
   display: flex;
   flex-direction: column;
-  width: 25%;
+  gap: 10px;
+}
+
+.profileUserInfoContainer {
+  flex-direction: column;
+}
+
+.profileMyClasses {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profileEachClass {
+  color: white;
+  background-color: green;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .profileComplete {
