@@ -5,16 +5,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import LocationInput from "./LocationInput";
 
-import {
-  Flex,
-  Text,
-  Input,
-  HStack,
-  Tag,
-  TagLabel,
-  TagCloseButton,
-  Textarea,
-} from "@chakra-ui/react";
+import { Flex, Text, Input, Textarea } from "@chakra-ui/react";
 import "./profile.css";
 
 const Profile = () => {
