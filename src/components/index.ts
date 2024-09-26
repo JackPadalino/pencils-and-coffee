@@ -3,7 +3,10 @@ import App from "./App/App";
 import Navbar from "./Navbar/Navbar";
 import Home from "./Home/Home";
 import NotFound from "./NotFound/NotFound";
+
+// profile components
 import Profile from "./Profile/Profile";
+import EditProfileModal from "./Profile/EditProfileModal";
 
 // authentication components
 import {
@@ -31,4 +34,5 @@ export {
   ResetPassword,
   Register,
   Profile,
+  EditProfileModal,
 };

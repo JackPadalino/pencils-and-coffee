@@ -5,9 +5,18 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 // import LocationInput from "./LocationInput";
 
+import EditProfileModal from "./EditProfileModal";
+
 import {
   Flex,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   // Input,
   // Textarea
 } from "@chakra-ui/react";
@@ -17,6 +26,7 @@ import "./profile.css";
 // here
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   // const [profileCompletion, setProfileCompletion] = useState<number>(0);
 
   // // calculating how much of a user's profile is complete based on number of
@@ -63,9 +73,19 @@ const Profile = () => {
           >
             Profile: {profileCompletion}% complete
           </Text> */}
-          <Text>{user.name}</Text>
-          <Text>{user.headline}</Text>
-          <Text>{user.location}</Text>
+          <Flex className="profileHeaderContainer">
+            <Flex className="profileHeaderSubContainer">
+              <Text>{user.name}</Text>
+              <Text
+                onClick={() => setModalOpen(!modalOpen)}
+                className="profileEditBtn"
+              >
+                Edit
+              </Text>
+            </Flex>
+            <Text>{user.headline}</Text>
+            <Text>{user.location}</Text>
+          </Flex>
           <Text>{user.about}</Text>
           <Flex className="profileMyClasses">
             {user.classes.map((eachClass: string, index: number) => (
@@ -103,6 +123,7 @@ const Profile = () => {
               </Flex>
             </Flex>
           </form> */}
+          <EditProfileModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
         </>
       )}
     </Flex>
