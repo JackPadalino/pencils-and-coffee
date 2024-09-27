@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import LocationInput from "./LocationInput";
 import {
   Flex,
-  Button,
   Text,
   Modal,
   ModalOverlay,
@@ -96,12 +95,7 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
             </form>
           </ModalBody>
 
-          <ModalFooter>
-            {/* <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button> */}
-          </ModalFooter>
+          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </>

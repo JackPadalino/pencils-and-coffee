@@ -3,23 +3,10 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 import { auth, db } from "../../../firebase";
-// import LocationInput from "./LocationInput";
 
 import EditProfileModal from "./EditProfileModal";
 
-import {
-  Flex,
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  // Input,
-  // Textarea
-} from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import "./profile.css";
 
 // user profile component - a user can view/edit their personal information
