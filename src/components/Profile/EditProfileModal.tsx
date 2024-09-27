@@ -59,23 +59,23 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
             <Text
               className={
                 profileCompletion < 100
-                  ? "profileIncomplete"
-                  : "profileComplete"
+                  ? "editProfileIncomplete"
+                  : "editProfileComplete"
               }
             >
               Profile: {profileCompletion}% complete
             </Text>
-            <form className="profileUserInfoForm">
-              <Flex className="profileUserInfoContainer">
+            <form className="editProfileForm">
+              <Flex className="editProfileInfoContainer">
                 <Text>Name:</Text>
                 <Input id="name" defaultValue={user.name} placeholder="Name" />
               </Flex>
 
-              <Flex className="profileUserInfoContainer">
+              <Flex className="editProfileInfoContainer">
                 <Text>Location:</Text>
                 <LocationInput currentLocation={user.location} />
               </Flex>
-              <Flex className="profileUserInfoContainer">
+              <Flex className="editProfileInfoContainer">
                 <Text>About me:</Text>
                 <Textarea
                   id="about"
@@ -83,11 +83,11 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
                   placeholder="Bio"
                 />
               </Flex>
-              <Flex className="profileUserInfoContainer">
+              <Flex className="editProfileInfoContainer">
                 <Text>My classes:</Text>
-                <Flex className="profileMyClasses">
+                <Flex className="editProfileMyClasses">
                   {user.classes.map((eachClass: string, index: number) => (
-                    <Text key={index} className="profileEachClass">
+                    <Text key={index} className="editProfileEachClass">
                       {eachClass}
                     </Text>
                   ))}

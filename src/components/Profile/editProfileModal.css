@@ -1,0 +1,43 @@
+/* breakpoint for mobile portrait view */
+@media only screen and (max-width: 600px) {
+}
+
+/* breakpoint for mobile landscape view */
+@media only screen and (min-width: 600px) and (max-width: 1280px) {
+}
+
+/* breakpoint for laptop/desktop view */
+@media only screen and (min-width: 1280px) {
+}
+
+/* css for all views  */
+.editProfileForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editProfileInfoContainer {
+  flex-direction: column;
+}
+
+.editProfileMyClasses {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.editProfileEachClass {
+  color: white;
+  background-color: green;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.editProfileComplete {
+  color: green;
+}
+
+.editProfileIncomplete {
+  color: red;
+}

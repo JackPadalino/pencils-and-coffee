@@ -46,16 +46,6 @@
   background-color: rgb(232, 232, 232);
 }
 
-/* .profileUserInfoForm {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-} */
-
-/* .profileUserInfoContainer {
-  flex-direction: column;
-} */
-
 .profileMyClasses {
   gap: 10px;
   flex-wrap: wrap;
@@ -67,12 +57,4 @@
   border-radius: 20px;
   padding-left: 10px;
   padding-right: 10px;
-}
-
-.profileComplete {
-  color: green;
-}
-
-.profileIncomplete {
-  color: red;
 }
