@@ -206,7 +206,9 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
                   ))}
                 </Flex>
               </Flex>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" isDisabled={locationError ? true : false}>
+                Save changes
+              </Button>
             </form>
           </ModalBody>
 
