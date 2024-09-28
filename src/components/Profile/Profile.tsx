@@ -23,9 +23,9 @@ const Profile = () => {
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("email", "==", firestoreUser.email));
         await getDocs(q).then((querySnapshot) => {
-          const userDoc = querySnapshot.docs[0];
-          const userInfo = userDoc.data();
-          setUser(userInfo);
+          const doc = querySnapshot.docs[0];
+          const docInfo = { id: doc.id, ...doc.data() };
+          setUser(docInfo);
         });
       }
     });
