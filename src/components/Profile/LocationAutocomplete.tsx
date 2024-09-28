@@ -1,3 +1,7 @@
+/** Google Maps autocomplete component - was previously being
+ * used in the EditProfileModal component for user profile
+ */
+
 import { useState, useEffect, useRef } from "react";
 import {
   APIProvider,
@@ -20,7 +24,7 @@ type LocationInputProps = {
 // Google maps autocomplete location input - this component uses
 // the Google Maps API to create an autocomplete input. As the user
 // types their location, Google Maps displays suggested locations
-const LocationInput = ({ currentLocation }: LocationInputProps) => {
+const LocationAutocomplete = ({ currentLocation }: LocationInputProps) => {
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_PLACES_API_KEY!}>
       <PlaceAutocomplete currentLocation={currentLocation} />
@@ -97,4 +101,4 @@ const PlaceAutocomplete = ({ currentLocation }: LocationInputProps) => {
   return <Input ref={inputRef} defaultValue={currentLocation} />;
 };
 
-export default LocationInput;
+export default LocationAutocomplete;
