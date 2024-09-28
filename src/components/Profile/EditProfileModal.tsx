@@ -39,7 +39,19 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
     location: user.location,
     about: user.about,
   });
-  const [locationError, setLocationError] = useState<string>("");
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    headline: "",
+    postalCode: "",
+    about: "",
+  });
+
+  const handleFormErrors = (field: string, message: string) => {
+    setFormErrors((prev) => ({
+      ...prev,
+      [field]: message,
+    }));
+  };
 
   // // calculating how much of a user's profile is complete based on number of
   // // completed form inputs
@@ -91,31 +103,44 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
 
   const handleUserInputChange = async (e: ChangeEvent<any>) => {
     const { id, value } = e.target;
-    // verify location
+    // check if postalCode first
     if (id === "postalCode") {
-      const location = await getUserLocation(value);
-      if (!location) {
-        setLocationError("Oops! There was a problem finding your location.");
+      if (!value) {
+        handleFormErrors("postalCode", "This is a required field.");
+      } else {
+        const location = await getUserLocation(value);
+        if (location) {
+          setUserProfile({
+            ...userProfile,
+            location: location,
+            [id]: value,
+          });
+          handleFormErrors("postalCode", "");
+        } else {
+          handleFormErrors(
+            "postalCode",
+            "Oops! There was a problem finding your location."
+          );
+        }
+      }
+    } else {
+      // validate other fields and set errors
+      if (!value) {
+        handleFormErrors(id, "This is a required field.");
       } else {
         setUserProfile({
           ...userProfile,
-          location: location,
           [id]: value,
         });
-        setLocationError("");
+        handleFormErrors(id, "");
       }
-    } else {
-      setUserProfile({
-        ...userProfile,
-        [id]: value,
-      });
     }
   };
 
+  // update user information in firestore db
   const saveProfileChanges = async (e: FormEvent) => {
     e.preventDefault();
-    if (locationError) return;
-    // update user information in firestore db
+    if (Object.values(formErrors).some((error) => error)) return;
     await updateDoc(doc(db, "users", userProfile.id), {
       name: userProfile.name,
       headline: userProfile.headline,
@@ -149,55 +174,62 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
             </Text> */}
             <form className="editProfileForm" onSubmit={saveProfileChanges}>
               <Flex className="editProfileInfoContainer">
-                <Text>Name:</Text>
+                <Text>Name</Text>
                 <Input
                   id="name"
                   type="text"
                   defaultValue={user.name}
-                  placeholder="Name"
-                  required={true}
                   onChange={handleUserInputChange}
                 />
-              </Flex>
-              <Flex className="editProfileInfoContainer">
-                <Text>Headline:</Text>
-                <Input
-                  id="headline"
-                  type="text"
-                  defaultValue={user.headline}
-                  placeholder="Headline"
-                  required={true}
-                  onChange={handleUserInputChange}
-                />
-              </Flex>
-              <Flex className="editProfileInfoContainer">
-                <Text>Postal code:</Text>
-                <Input
-                  id="postalCode"
-                  type="number"
-                  defaultValue={user.postalCode}
-                  placeholder="Postal code"
-                  required={true}
-                  onChange={handleUserInputChange}
-                />
-                {locationError && (
-                  <Text fontSize="sm" color={"red"}>
-                    {locationError}
+                {formErrors.name && (
+                  <Text fontSize="sm" color="red">
+                    {formErrors.name}
                   </Text>
                 )}
               </Flex>
               <Flex className="editProfileInfoContainer">
-                <Text>About me:</Text>
+                <Text>Headline</Text>
+                <Input
+                  id="headline"
+                  type="text"
+                  defaultValue={user.headline}
+                  onChange={handleUserInputChange}
+                />
+                {formErrors.headline && (
+                  <Text fontSize="sm" color="red">
+                    {formErrors.headline}
+                  </Text>
+                )}
+              </Flex>
+              <Flex className="editProfileInfoContainer">
+                <Text>Postal code</Text>
+                <Input
+                  id="postalCode"
+                  type="number"
+                  defaultValue={user.postalCode}
+                  onChange={handleUserInputChange}
+                />
+                {formErrors.postalCode && (
+                  <Text fontSize="sm" color="red">
+                    {formErrors.postalCode}
+                  </Text>
+                )}
+              </Flex>
+              <Flex className="editProfileInfoContainer">
+                <Text>About me</Text>
                 <Textarea
                   id="about"
                   defaultValue={user.about}
-                  placeholder="About me"
-                  required={true}
                   onChange={handleUserInputChange}
                 />
+                {formErrors.about && (
+                  <Text fontSize="sm" color="red">
+                    {formErrors.about}
+                  </Text>
+                )}
               </Flex>
               <Flex className="editProfileInfoContainer">
-                <Text>My classes:</Text>
+                <Text>My classes</Text>
                 <Flex className="editProfileMyClasses">
                   {user.classes.map((eachClass: string, index: number) => (
                     <Text key={index} className="editProfileEachClass">
@@ -206,7 +238,10 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
                   ))}
                 </Flex>
               </Flex>
-              <Button type="submit" isDisabled={locationError ? true : false}>
+              <Button
+                type="submit"
+                isDisabled={Object.values(formErrors).some((error) => error)}
+              >
                 Save changes
               </Button>
             </form>
