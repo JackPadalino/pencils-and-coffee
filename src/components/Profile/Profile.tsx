@@ -59,6 +59,7 @@ const Profile = () => {
           </Flex>
           <EditProfileModal
             user={user}
+            setUser={setUser}
             modalOpen={modalOpen}
             setModalOpen={setModalOpen}
           />

@@ -1,8 +1,9 @@
 import {
   useState,
-  // useEffect,
   ChangeEvent,
   FormEvent,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { db } from "../../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
@@ -23,15 +24,30 @@ import {
 
 import "./editProfileModal.css";
 
-type props = {
-  user: any;
-  modalOpen: boolean;
-  setModalOpen: (modalOpen: boolean) => void;
+type User = {
+  id: string;
+  name: string;
+  headline: string;
+  postalCode: string;
+  location: string;
+  about: string;
+  classes: [];
 };
 
-const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
-  // const [profileCompletion, setProfileCompletion] = useState<number>(0);
-  const [userProfile, setUserProfile] = useState({
+type props = {
+  user: User;
+  setUser: Dispatch<SetStateAction<User | null>>;
+  modalOpen: boolean;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+const EditProfileModal = ({
+  user,
+  setUser,
+  modalOpen,
+  setModalOpen,
+}: props) => {
+  const [tempProfile, setTempProfile] = useState({
     id: user.id,
     name: user.name,
     headline: user.headline,
@@ -52,24 +68,6 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
       [field]: message,
     }));
   };
-
-  // // calculating how much of a user's profile is complete based on number of
-  // // completed form inputs
-  // const calculateProfileCompletion = (userInfo: any) => {
-  //   const userAttributes = ["name", "email", "classes", "location", "about"];
-  //   const attributesCompleted = userAttributes.filter((attr) => {
-  //     return Array.isArray(userInfo[attr])
-  //       ? userInfo[attr].length > 0
-  //       : !!userInfo[attr];
-  //   });
-  //   const percentComplete =
-  //     (attributesCompleted.length / userAttributes.length) * 100;
-  //   setProfileCompletion(percentComplete);
-  // };
-
-  // useEffect(() => {
-  //   calculateProfileCompletion(user);
-  // }, []);
 
   const getUserLocation = async (postalCode: string) => {
     try {
@@ -110,8 +108,8 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
       } else {
         const location = await getUserLocation(value);
         if (location) {
-          setUserProfile({
-            ...userProfile,
+          setTempProfile({
+            ...user,
             location: location,
             [id]: value,
           });
@@ -128,8 +126,8 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
       if (!value) {
         handleFormErrors(id, "This is a required field.");
       } else {
-        setUserProfile({
-          ...userProfile,
+        setTempProfile({
+          ...user,
           [id]: value,
         });
         handleFormErrors(id, "");
@@ -141,12 +139,20 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
   const saveProfileChanges = async (e: FormEvent) => {
     e.preventDefault();
     if (Object.values(formErrors).some((error) => error)) return;
-    await updateDoc(doc(db, "users", userProfile.id), {
-      name: userProfile.name,
-      headline: userProfile.headline,
-      postalCode: userProfile.postalCode,
-      location: userProfile.location,
-      about: userProfile.about,
+    await updateDoc(doc(db, "users", user.id), {
+      name: tempProfile.name,
+      headline: tempProfile.headline,
+      postalCode: tempProfile.postalCode,
+      location: tempProfile.location,
+      about: tempProfile.about,
+    });
+    setUser({
+      ...user,
+      name: tempProfile.name,
+      headline: tempProfile.headline,
+      postalCode: tempProfile.postalCode,
+      location: tempProfile.location,
+      about: tempProfile.about,
     });
     setModalOpen(!modalOpen);
   };
@@ -163,15 +169,6 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
           <ModalHeader>Edit profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {/* <Text
-              className={
-                profileCompletion < 100
-                  ? "editProfileIncomplete"
-                  : "editProfileComplete"
-              }
-            >
-              Profile: {profileCompletion}% complete
-            </Text> */}
             <form className="editProfileForm" onSubmit={saveProfileChanges}>
               <Flex className="editProfileInfoContainer">
                 <Text>Name</Text>
