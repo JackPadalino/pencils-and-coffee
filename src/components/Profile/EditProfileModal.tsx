@@ -59,11 +59,11 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
   //   calculateProfileCompletion(user);
   // }, []);
 
-  const getUserLocation = async () => {
+  const getUserLocation = async (postalCode: string) => {
     try {
-      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${
-        userProfile.postalCode
-      }&key=${import.meta.env.VITE_GOOGLE_PLACES_API_KEY}`;
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${
+        import.meta.env.VITE_GOOGLE_PLACES_API_KEY
+      }`;
 
       const response = await fetch(geocodeUrl);
       const data = await response.json();
@@ -89,35 +89,38 @@ const EditProfileModal = ({ user, modalOpen, setModalOpen }: props) => {
     }
   };
 
-  const handleUserInputChange = (e: ChangeEvent<any>) => {
+  const handleUserInputChange = async (e: ChangeEvent<any>) => {
     const { id, value } = e.target;
     // verify location
-
-    setUserProfile({
-      ...userProfile,
-      [id]: value,
-    });
+    if (id === "postalCode") {
+      const location = await getUserLocation(value);
+      if (!location) {
+        setLocationError("Oops! There was a problem finding your location.");
+      } else {
+        setUserProfile({
+          ...userProfile,
+          location: location,
+          [id]: value,
+        });
+        setLocationError("");
+      }
+    } else {
+      setUserProfile({
+        ...userProfile,
+        [id]: value,
+      });
+    }
   };
 
   const saveProfileChanges = async (e: FormEvent) => {
     e.preventDefault();
-    // verify location before saving changes and closing modal
-    const location = await getUserLocation();
-    if (!location) {
-      setLocationError("Oops! There was a problem finding your location.");
-      return;
-    } else {
-      setUserProfile({
-        ...userProfile,
-        location: location,
-      });
-      setLocationError("");
-    }
+    if (locationError) return;
     // update user information in firestore db
     await updateDoc(doc(db, "users", userProfile.id), {
       name: userProfile.name,
       headline: userProfile.headline,
-      location: location,
+      postalCode: userProfile.postalCode,
+      location: userProfile.location,
       about: userProfile.about,
     });
     setModalOpen(!modalOpen);
