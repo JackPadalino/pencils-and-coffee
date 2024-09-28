@@ -21,6 +21,12 @@
   flex-direction: column;
 }
 
+/* setting z index on autocomplete drop down
+will be hidden behind modal otherwise */
+.pac-container {
+  z-index: 100000;
+}
+
 .editProfileMyClasses {
   gap: 10px;
   flex-wrap: wrap;
