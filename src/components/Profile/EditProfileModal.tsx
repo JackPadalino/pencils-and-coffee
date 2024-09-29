@@ -137,7 +137,7 @@ const EditProfileModal = ({
     }
   };
 
-  const handleDeleteClass = (e: SyntheticEvent) => {
+  const handleDeleteClass = () => {
     console.log("Class deleted!");
   };
 
