@@ -52,9 +52,9 @@
 }
 
 .profileEachClass {
+  flex-direction: column;
   color: white;
   background-color: green;
-  border-radius: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+  border-radius: 5px;
+  padding: 5px;
 }

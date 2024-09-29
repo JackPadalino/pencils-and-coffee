@@ -33,17 +33,21 @@ will be hidden behind modal otherwise */
 }
 
 .editProfileEachClass {
+  flex-direction: column;
   color: white;
   background-color: green;
-  border-radius: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
-.editProfileComplete {
+.editProfileDeleteClass {
+  cursor: pointer;
+}
+
+/* .editProfileComplete {
   color: green;
 }
 
 .editProfileIncomplete {
   color: red;
-}
+} */

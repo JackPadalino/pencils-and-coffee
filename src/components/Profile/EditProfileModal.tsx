@@ -1,6 +1,7 @@
 import {
   useState,
   ChangeEvent,
+  SyntheticEvent,
   FormEvent,
   Dispatch,
   SetStateAction,
@@ -21,6 +22,7 @@ import {
   Input,
   Textarea,
 } from "@chakra-ui/react";
+import { IoCloseOutline } from "react-icons/io5";
 
 import "./editProfileModal.css";
 
@@ -36,7 +38,7 @@ type User = {
 
 type props = {
   user: User;
-  setUser: Dispatch<SetStateAction<User | null>>;
+  setUser: Dispatch<SetStateAction<any | null>>;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 };
@@ -135,6 +137,10 @@ const EditProfileModal = ({
     }
   };
 
+  const handleDeleteClass = (e: SyntheticEvent) => {
+    console.log("Class deleted!");
+  };
+
   // update user information in firestore db
   const saveProfileChanges = async (e: FormEvent) => {
     e.preventDefault();
@@ -191,6 +197,7 @@ const EditProfileModal = ({
                   type="text"
                   defaultValue={user.headline}
                   onChange={handleUserInputChange}
+                  placeholder="For example: Art and Music Teacher"
                 />
                 {formErrors.headline && (
                   <Text fontSize="sm" color="red">
@@ -205,6 +212,7 @@ const EditProfileModal = ({
                   type="number"
                   defaultValue={user.postalCode}
                   onChange={handleUserInputChange}
+                  placeholder="Enter a 5 digit postal code"
                 />
                 {formErrors.postalCode && (
                   <Text fontSize="sm" color="red">
@@ -218,6 +226,7 @@ const EditProfileModal = ({
                   id="about"
                   defaultValue={user.about}
                   onChange={handleUserInputChange}
+                  placeholder="Describe the classes you teach, your student demographics, what kind of team your're looking for, etc. The more details you include the more likely you are to find your dream team!"
                 />
                 {formErrors.about && (
                   <Text fontSize="sm" color="red">
@@ -228,10 +237,18 @@ const EditProfileModal = ({
               <Flex className="editProfileInfoContainer">
                 <Text>My classes</Text>
                 <Flex className="editProfileMyClasses">
-                  {user.classes.map((eachClass: string, index: number) => (
-                    <Text key={index} className="editProfileEachClass">
-                      {eachClass}
-                    </Text>
+                  {user.classes.map((eachClass: any, index: number) => (
+                    <Flex key={index} className="editProfileEachClass">
+                      <Flex>
+                        <Text>{eachClass.subject}</Text>
+                        <IoCloseOutline
+                          className="editProfileDeleteClass"
+                          onClick={handleDeleteClass}
+                        />
+                      </Flex>
+
+                      <Text fontSize="xs">Grade: {eachClass.grade}</Text>
+                    </Flex>
                   ))}
                 </Flex>
               </Flex>

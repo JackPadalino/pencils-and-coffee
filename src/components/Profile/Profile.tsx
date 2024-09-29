@@ -51,10 +51,11 @@ const Profile = () => {
           </Flex>
           <Text>{user.about}</Text>
           <Flex className="profileMyClasses">
-            {user.classes.map((eachClass: string, index: number) => (
-              <Text key={index} className="profileEachClass">
-                {eachClass}
-              </Text>
+            {user.classes.map((eachClass: any, index: number) => (
+              <Flex key={index} className="profileEachClass">
+                <Text>{eachClass.subject}</Text>
+                <Text fontSize="xs">Grade: {eachClass.grade}</Text>
+              </Flex>
             ))}
           </Flex>
           <EditProfileModal
