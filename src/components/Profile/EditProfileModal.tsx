@@ -32,7 +32,7 @@ type User = {
   postalCode: string;
   location: string;
   about: string;
-  classes: [];
+  classes: { grade: number; subject: string }[];
 };
 
 type props = {
@@ -40,6 +40,7 @@ type props = {
   setUser: Dispatch<SetStateAction<any | null>>;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
+  modalSize: string;
 };
 
 const EditProfileModal = ({
@@ -47,6 +48,7 @@ const EditProfileModal = ({
   setUser,
   modalOpen,
   setModalOpen,
+  modalSize,
 }: props) => {
   const [tempProfile, setTempProfile] = useState({
     id: user.id,
@@ -167,7 +169,7 @@ const EditProfileModal = ({
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(!modalOpen)}
-        size="xl"
+        size={modalSize}
       >
         <ModalOverlay />
         <ModalContent>
@@ -238,7 +240,7 @@ const EditProfileModal = ({
                 <Flex className="editProfileMyClasses">
                   {user.classes.map((eachClass: any, index: number) => (
                     <Flex key={index} className="editProfileEachClass">
-                      <Flex>
+                      <Flex className="eachClassTop">
                         <Text>{eachClass.subject}</Text>
                         <IoCloseOutline
                           className="editProfileDeleteClass"
