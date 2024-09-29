@@ -207,7 +207,7 @@ const EditProfileModal = ({
                 )}
               </Flex>
               <Flex className="editProfileInfoContainer">
-                <Text>Postal code</Text>
+                <Text>Location</Text>
                 <Input
                   id="postalCode"
                   type="number"
