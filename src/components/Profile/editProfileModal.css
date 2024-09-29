@@ -40,6 +40,10 @@ will be hidden behind modal otherwise */
   padding: 5px;
 }
 
+.eachClassTop {
+  gap: 10px;
+}
+
 .editProfileDeleteClass {
   cursor: pointer;
 }

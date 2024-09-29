@@ -9,11 +9,34 @@ import EditProfileModal from "./EditProfileModal";
 import { Flex, Text } from "@chakra-ui/react";
 import "./profile.css";
 
+// type User = {
+//   id: string;
+//   name: string;
+//   headline: string;
+//   postalCode: string;
+//   location: string;
+//   about: string;
+//   classes: { grade: number; subject: string }[];
+// };
+
 // user profile component - a user can view/edit their personal information
 // here
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalSize, setModalSize] = useState<string>("");
+
+  // check for mobile view to determine edit profile modal size
+  // maybe send state up to redux store to be used by other components
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1280px)");
+    const handleResize = () => {
+      setModalSize(mediaQuery.matches ? "full" : "xl");
+    };
+    mediaQuery.addEventListener("change", handleResize);
+    handleResize(); // initial call
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
 
   // checking for user locally -> need to add user object to recoil or redux store
   // when logging in and then pull down to this component later
@@ -63,6 +86,7 @@ const Profile = () => {
             setUser={setUser}
             modalOpen={modalOpen}
             setModalOpen={setModalOpen}
+            modalSize={modalSize}
           />
         </>
       )}
