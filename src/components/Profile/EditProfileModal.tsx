@@ -1,7 +1,6 @@
 import {
   useState,
   ChangeEvent,
-  SyntheticEvent,
   FormEvent,
   Dispatch,
   SetStateAction,
