@@ -22,7 +22,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { IoCloseOutline } from "react-icons/io5";
-
+import DeleteClassAlert from "./DeleteClassAlert";
 import "./editProfileModal.css";
 
 type User = {
@@ -64,6 +64,8 @@ const EditProfileModal = ({
     postalCode: "",
     about: "",
   });
+
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
 
   const handleFormErrors = (field: string, message: string) => {
     setFormErrors((prev) => ({
@@ -139,7 +141,7 @@ const EditProfileModal = ({
   };
 
   const handleDeleteClass = () => {
-    console.log("Class deleted!");
+    setDeleteAlertOpen(!deleteAlertOpen);
   };
 
   // update user information in firestore db
@@ -170,6 +172,7 @@ const EditProfileModal = ({
         isOpen={modalOpen}
         onClose={() => setModalOpen(!modalOpen)}
         size={modalSize}
+        isCentered
       >
         <ModalOverlay />
         <ModalContent>
@@ -264,6 +267,10 @@ const EditProfileModal = ({
 
           <ModalFooter></ModalFooter>
         </ModalContent>
+        <DeleteClassAlert
+          deleteAlertOpen={deleteAlertOpen}
+          setDeleteAlertOpen={setDeleteAlertOpen}
+        />
       </Modal>
     </>
   );
