@@ -57,6 +57,7 @@ const EditProfileModal = ({
     postalCode: user.postalCode,
     location: user.location,
     about: user.about,
+    classes: user.classes,
   });
   const [formErrors, setFormErrors] = useState({
     name: "",
@@ -64,7 +65,6 @@ const EditProfileModal = ({
     postalCode: "",
     about: "",
   });
-
   const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
 
   const handleFormErrors = (field: string, message: string) => {
@@ -140,8 +140,11 @@ const EditProfileModal = ({
     }
   };
 
-  const handleDeleteClass = () => {
-    setDeleteAlertOpen(!deleteAlertOpen);
+  const handleDeleteClass = (index: number) => {
+    if (index >= 0 && index < tempProfile.classes.length) {
+      tempProfile.classes.splice(index, 1);
+      setTempProfile({ ...tempProfile, classes: tempProfile.classes });
+    }
   };
 
   // update user information in firestore db
@@ -241,13 +244,13 @@ const EditProfileModal = ({
               <Flex className="editProfileInfoContainer">
                 <Text>My classes</Text>
                 <Flex className="editProfileMyClasses">
-                  {user.classes.map((eachClass: any, index: number) => (
+                  {tempProfile.classes.map((eachClass: any, index: number) => (
                     <Flex key={index} className="editProfileEachClass">
                       <Flex className="eachClassTop">
                         <Text>{eachClass.subject}</Text>
                         <IoCloseOutline
                           className="editProfileDeleteClass"
-                          onClick={handleDeleteClass}
+                          onClick={() => handleDeleteClass(index)}
                         />
                       </Flex>
 
