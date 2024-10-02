@@ -16,6 +16,7 @@ import DeleteClassAlert from "./DeleteClassAlert";
 import {
   Flex,
   Text,
+  Select,
   Button,
   Modal,
   ModalOverlay,
@@ -26,7 +27,13 @@ import {
   ModalCloseButton,
   Input,
   Textarea,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
+import { IoMdAddCircleOutline } from "react-icons/io";
 import "./editProfileModal.css";
 
 type props = {
@@ -69,6 +76,9 @@ props) => {
   // variables for deleting a class from user's profile
   const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
   const deleteIndex = useRef<number>(0);
+
+  // variables for adding a new class
+  const [showAddClassForm, setShowAddClassForm] = useState<boolean>(false);
 
   // using the google maps places api to determine user's city from their zip code
   const getUserLocation = async (postalCode: string) => {
@@ -198,7 +208,7 @@ props) => {
           <ModalBody>
             <form className="editProfileForm" onSubmit={saveProfileChanges}>
               <Flex className="editProfileInfoContainer">
-                <Text>Name</Text>
+                <Text className="formSectionTitle">Name</Text>
                 <Input
                   id="name"
                   type="text"
@@ -212,7 +222,7 @@ props) => {
                 )}
               </Flex>
               <Flex className="editProfileInfoContainer">
-                <Text>Headline</Text>
+                <Text className="formSectionTitle">Headline</Text>
                 <Input
                   id="headline"
                   type="text"
@@ -227,7 +237,7 @@ props) => {
                 )}
               </Flex>
               <Flex className="editProfileInfoContainer">
-                <Text>Location</Text>
+                <Text className="formSectionTitle">Location</Text>
                 <Input
                   id="postalCode"
                   type="number"
@@ -242,7 +252,7 @@ props) => {
                 )}
               </Flex>
               <Flex className="editProfileInfoContainer">
-                <Text>About me</Text>
+                <Text className="formSectionTitle">About me</Text>
                 <Textarea
                   id="about"
                   defaultValue={tempProfile.about}
@@ -255,8 +265,40 @@ props) => {
                   </Text>
                 )}
               </Flex>
-              <Flex className="editProfileInfoContainer">
-                <Text>My classes</Text>
+              <Flex className="editProfileInfoContainer myClassesContainer">
+                <Flex className="myClassesTopContainer">
+                  <Text className="formSectionTitle">My classes</Text>
+                  <Flex
+                    className="addClassContainer"
+                    onClick={() => setShowAddClassForm(!showAddClassForm)}
+                  >
+                    <IoMdAddCircleOutline className="formSectionTitle" />
+                    <Text>Add class</Text>
+                  </Flex>
+                </Flex>
+                {showAddClassForm && (
+                  <>
+                    <form className="addNewClassForm">
+                      <Text>New class name</Text>
+                      <Select placeholder="Select">
+                        <option value="option1">English</option>
+                        <option value="option2">History</option>
+                        <option value="option3">Social Studies</option>
+                        <option value="option3">Science</option>
+                        <option value="option3">Computer Science</option>
+                      </Select>
+                      <Text>Grade level</Text>
+                      <NumberInput defaultValue={1} min={1} max={12}>
+                        <NumberInputField />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                      <Button className="addClassBtn">Add class</Button>
+                    </form>
+                  </>
+                )}
                 <Flex className="editProfileMyClasses">
                   {tempProfile.classes.map((eachClass: any, index: number) => (
                     <Flex key={index} className="editProfileEachClass">

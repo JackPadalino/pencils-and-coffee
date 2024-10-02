@@ -11,6 +11,10 @@
 }
 
 /* css for all views  */
+.formSectionTitle {
+  font-weight: 600;
+}
+
 .editProfileForm {
   display: flex;
   flex-direction: column;
@@ -32,6 +36,10 @@ will be hidden behind modal otherwise */
   flex-wrap: wrap;
 }
 
+.myClassesContainer {
+  gap: 10px;
+}
+
 .editProfileEachClass {
   flex-direction: column;
   color: white;
@@ -46,6 +54,29 @@ will be hidden behind modal otherwise */
 
 .editProfileDeleteClass {
   cursor: pointer;
+}
+
+.myClassesTopContainer {
+  justify-content: space-between;
+}
+
+.addClassContainer {
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.addClassContainer:hover {
+  color: green;
+}
+
+.addNewClassForm {
+  margin-bottom: 40px;
+}
+
+.addClassBtn {
+  width: 100%;
+  margin-top: 5px;
 }
 
 /* .editProfileComplete {
