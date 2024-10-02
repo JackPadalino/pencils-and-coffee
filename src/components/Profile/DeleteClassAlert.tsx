@@ -9,7 +9,7 @@ import {
   //   AlertDialogCloseButton,
   Button,
 } from "@chakra-ui/react";
-import "./deleteclassalert.css";
+import "./deleteClassAlert.css";
 
 type props = {
   deleteAlertOpen: boolean;
