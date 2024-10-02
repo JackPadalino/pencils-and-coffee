@@ -14,21 +14,21 @@ import "./profile.css";
 const Profile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [modalSize, setModalSize] = useState<string>("");
+  // const [modalSize, setModalSize] = useState<string>("");
 
   // check for mobile view to determine edit profile modal size
   // ideally we check for this when the app loads in the root componnent,
   // and then send some piece of state to a Redux store. All child components
   // then pull the view state down from store.
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 1280px)");
-    const handleResize = () => {
-      setModalSize(mediaQuery.matches ? "full" : "xl");
-    };
-    mediaQuery.addEventListener("change", handleResize);
-    handleResize(); // initial call
-    return () => mediaQuery.removeEventListener("change", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const mediaQuery = window.matchMedia("(max-width: 1280px)");
+  //   const handleResize = () => {
+  //     setModalSize(mediaQuery.matches ? "full" : "xl");
+  //   };
+  //   mediaQuery.addEventListener("change", handleResize);
+  //   handleResize(); // initial call
+  //   return () => mediaQuery.removeEventListener("change", handleResize);
+  // }, []);
 
   // checking for user locally -> need to add user object to recoil or redux store
   // when logging in and then pull down to this component later
@@ -78,7 +78,7 @@ const Profile = () => {
             setUserProfile={setUserProfile}
             modalOpen={modalOpen}
             setModalOpen={setModalOpen}
-            modalSize={modalSize}
+            // modalSize={modalSize}
           />
         </>
       )}
