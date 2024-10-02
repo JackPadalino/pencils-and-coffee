@@ -1,12 +1,19 @@
 import {
   useRef,
   useState,
+  useEffect,
   ChangeEvent,
   FormEvent,
   Dispatch,
   SetStateAction,
 } from "react";
 import { doc, updateDoc } from "firebase/firestore";
+import { IoCloseOutline } from "react-icons/io5";
+
+import { db } from "../../../firebase";
+import { UserProfile } from "../../Types";
+import DeleteClassAlert from "./DeleteClassAlert";
+
 import {
   Flex,
   Text,
@@ -21,23 +28,10 @@ import {
   Input,
   Textarea,
 } from "@chakra-ui/react";
-import { IoCloseOutline } from "react-icons/io5";
-import { db } from "../../../firebase";
-import DeleteClassAlert from "./DeleteClassAlert";
 import "./editProfileModal.css";
 
-type User = {
-  id: string;
-  name: string;
-  headline: string;
-  postalCode: string;
-  location: string;
-  about: string;
-  classes: { grade: number; subject: string }[];
-};
-
 type props = {
-  userProfile: User;
+  userProfile: UserProfile;
   setUserProfile: Dispatch<SetStateAction<any | null>>;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
@@ -51,7 +45,9 @@ const EditProfileModal = ({
   setModalOpen,
   modalSize,
 }: props) => {
-  // here we are creating a temporary state of of the user's profile. By
+  // here we are creating a temporary state of of the user's profile. Instead of
+  // creating a separate piece of state for each profile property, we create a single
+  // piece of state, an object, that will hold the state of the entire form. By
   // creating a tempProfile we are able to edit a user's profile without
   // seeing the changes happen in the background behind the modal as the user
   // makes changes from within the modal
@@ -74,13 +70,6 @@ const EditProfileModal = ({
   // variables for deleting a class from user's profile
   const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
   const deleteIndex = useRef<number>(0);
-
-  const handleFormErrors = (field: string, message: string) => {
-    setFormErrors((prev) => ({
-      ...prev,
-      [field]: message,
-    }));
-  };
 
   // using the google maps places api to determine user's city from their zip code
   const getUserLocation = async (postalCode: string) => {
@@ -111,6 +100,13 @@ const EditProfileModal = ({
       console.error("Error validating city:", error);
       return null;
     }
+  };
+
+  const handleFormErrors = (field: string, message: string) => {
+    setFormErrors((prev) => ({
+      ...prev,
+      [field]: message,
+    }));
   };
 
   // handler for updating state of tempProfile -> first we are handling if the
@@ -165,6 +161,7 @@ const EditProfileModal = ({
   const saveProfileChanges = async (e: FormEvent) => {
     e.preventDefault();
     if (Object.values(formErrors).some((error) => error)) return;
+    // updated the user information in firestore db
     await updateDoc(doc(db, "users", userProfile.id), {
       name: tempProfile.name,
       headline: tempProfile.headline,
@@ -173,6 +170,7 @@ const EditProfileModal = ({
       about: tempProfile.about,
       classes: tempProfile.classes,
     });
+    // update the user information displayed on the profile page
     setUserProfile({
       ...userProfile,
       name: tempProfile.name,

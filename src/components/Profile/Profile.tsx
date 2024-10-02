@@ -9,16 +9,6 @@ import EditProfileModal from "./EditProfileModal";
 import { Flex, Text } from "@chakra-ui/react";
 import "./profile.css";
 
-// type User = {
-//   id: string;
-//   name: string;
-//   headline: string;
-//   postalCode: string;
-//   location: string;
-//   about: string;
-//   classes: { grade: number; subject: string }[];
-// };
-
 // user profile component - a user can view/edit their personal information
 // here
 const Profile = () => {
@@ -27,7 +17,9 @@ const Profile = () => {
   const [modalSize, setModalSize] = useState<string>("");
 
   // check for mobile view to determine edit profile modal size
-  // maybe send state up to redux store to be used by other components
+  // ideally we check for this when the app loads in the root componnent,
+  // and then send some piece of state to a Redux store. All child components
+  // then pull the view state down from store.
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1280px)");
     const handleResize = () => {

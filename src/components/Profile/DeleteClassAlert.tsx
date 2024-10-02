@@ -44,6 +44,7 @@ const DeleteClassAlert = ({
         onClose={() => setDeleteAlertOpen(!deleteAlertOpen)}
         isCentered
         motionPreset="slideInRight"
+        size="xs"
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
