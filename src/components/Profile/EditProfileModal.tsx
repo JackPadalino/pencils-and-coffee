@@ -34,7 +34,7 @@ type props = {
   setUserProfile: Dispatch<SetStateAction<any | null>>;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
-  modalSize: string;
+  // modalSize: string;
 };
 
 const EditProfileModal = ({
@@ -42,8 +42,8 @@ const EditProfileModal = ({
   setUserProfile,
   modalOpen,
   setModalOpen,
-  modalSize,
-}: props) => {
+}: // modalSize,
+props) => {
   // here we are creating a temporary state of of the user's profile. Instead of
   // creating a separate piece of state for each profile property, we create a single
   // piece of state, an object, that will hold the state of the entire form. By
@@ -187,7 +187,8 @@ const EditProfileModal = ({
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(!modalOpen)}
-        size={modalSize}
+        // size={modalSize}
+        size="xl"
         isCentered
       >
         <ModalOverlay />
