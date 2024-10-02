@@ -1,11 +1,11 @@
 import {
+  useRef,
   useState,
   ChangeEvent,
   FormEvent,
   Dispatch,
   SetStateAction,
 } from "react";
-import { db } from "../../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import {
   Flex,
@@ -22,6 +22,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { IoCloseOutline } from "react-icons/io5";
+import { db } from "../../../firebase";
 import DeleteClassAlert from "./DeleteClassAlert";
 import "./editProfileModal.css";
 
@@ -36,36 +37,43 @@ type User = {
 };
 
 type props = {
-  user: User;
-  setUser: Dispatch<SetStateAction<any | null>>;
+  userProfile: User;
+  setUserProfile: Dispatch<SetStateAction<any | null>>;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
   modalSize: string;
 };
 
 const EditProfileModal = ({
-  user,
-  setUser,
+  userProfile,
+  setUserProfile,
   modalOpen,
   setModalOpen,
   modalSize,
 }: props) => {
+  // here we are creating a temporary state of of the user's profile. By
+  // creating a tempProfile we are able to edit a user's profile without
+  // seeing the changes happen in the background behind the modal as the user
+  // makes changes from within the modal
   const [tempProfile, setTempProfile] = useState({
-    id: user.id,
-    name: user.name,
-    headline: user.headline,
-    postalCode: user.postalCode,
-    location: user.location,
-    about: user.about,
-    classes: user.classes,
+    id: userProfile.id,
+    name: userProfile.name,
+    headline: userProfile.headline,
+    postalCode: userProfile.postalCode,
+    location: userProfile.location,
+    about: userProfile.about,
+    classes: userProfile.classes,
   });
+  // a single piece of state to track all errors from inputs of the modal
   const [formErrors, setFormErrors] = useState({
     name: "",
     headline: "",
     postalCode: "",
     about: "",
   });
+  // variables for deleting a class from user's profile
   const [deleteAlertOpen, setDeleteAlertOpen] = useState<boolean>(false);
+  const deleteIndex = useRef<number>(0);
 
   const handleFormErrors = (field: string, message: string) => {
     setFormErrors((prev) => ({
@@ -74,6 +82,7 @@ const EditProfileModal = ({
     }));
   };
 
+  // using the google maps places api to determine user's city from their zip code
   const getUserLocation = async (postalCode: string) => {
     try {
       const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${
@@ -104,6 +113,13 @@ const EditProfileModal = ({
     }
   };
 
+  // handler for updating state of tempProfile -> first we are handling if the
+  // user is editing the postal code. The postal code logic in the first part of this
+  // handler is slightly more complex because we are displaying two different messages
+  // based on the input of zip code: 1. if no message at all we display "This is a required
+  // field" or 2. If the user has entered something into the input, but their zip code is
+  // not valid according to the google maps place apis we display "There was a problem
+  // finding your location"
   const handleUserInputChange = async (e: ChangeEvent<any>) => {
     const { id, value } = e.target;
     // check if postalCode first
@@ -114,7 +130,7 @@ const EditProfileModal = ({
         const location = await getUserLocation(value);
         if (location) {
           setTempProfile({
-            ...user,
+            ...tempProfile,
             location: location,
             [id]: value,
           });
@@ -132,7 +148,7 @@ const EditProfileModal = ({
         handleFormErrors(id, "This is a required field.");
       } else {
         setTempProfile({
-          ...user,
+          ...tempProfile,
           [id]: value,
         });
         handleFormErrors(id, "");
@@ -141,30 +157,30 @@ const EditProfileModal = ({
   };
 
   const handleDeleteClass = (index: number) => {
-    if (index >= 0 && index < tempProfile.classes.length) {
-      tempProfile.classes.splice(index, 1);
-      setTempProfile({ ...tempProfile, classes: tempProfile.classes });
-    }
+    setDeleteAlertOpen(!deleteAlertOpen);
+    deleteIndex.current = index;
   };
 
   // update user information in firestore db
   const saveProfileChanges = async (e: FormEvent) => {
     e.preventDefault();
     if (Object.values(formErrors).some((error) => error)) return;
-    await updateDoc(doc(db, "users", user.id), {
+    await updateDoc(doc(db, "users", userProfile.id), {
       name: tempProfile.name,
       headline: tempProfile.headline,
       postalCode: tempProfile.postalCode,
       location: tempProfile.location,
       about: tempProfile.about,
+      classes: tempProfile.classes,
     });
-    setUser({
-      ...user,
+    setUserProfile({
+      ...userProfile,
       name: tempProfile.name,
       headline: tempProfile.headline,
       postalCode: tempProfile.postalCode,
       location: tempProfile.location,
       about: tempProfile.about,
+      classes: tempProfile.classes,
     });
     setModalOpen(!modalOpen);
   };
@@ -188,7 +204,7 @@ const EditProfileModal = ({
                 <Input
                   id="name"
                   type="text"
-                  defaultValue={user.name}
+                  defaultValue={tempProfile.name}
                   onChange={handleUserInputChange}
                 />
                 {formErrors.name && (
@@ -202,7 +218,7 @@ const EditProfileModal = ({
                 <Input
                   id="headline"
                   type="text"
-                  defaultValue={user.headline}
+                  defaultValue={tempProfile.headline}
                   onChange={handleUserInputChange}
                   placeholder="For example: Art and Music Teacher"
                 />
@@ -217,7 +233,7 @@ const EditProfileModal = ({
                 <Input
                   id="postalCode"
                   type="number"
-                  defaultValue={user.postalCode}
+                  defaultValue={tempProfile.postalCode}
                   onChange={handleUserInputChange}
                   placeholder="Enter a 5 digit postal code"
                 />
@@ -231,7 +247,7 @@ const EditProfileModal = ({
                 <Text>About me</Text>
                 <Textarea
                   id="about"
-                  defaultValue={user.about}
+                  defaultValue={tempProfile.about}
                   onChange={handleUserInputChange}
                   placeholder="Describe the classes you teach, your student demographics, what kind of team your're looking for, etc. The more details you include the more likely you are to find your dream team!"
                 />
@@ -267,12 +283,15 @@ const EditProfileModal = ({
               </Button>
             </form>
           </ModalBody>
-
           <ModalFooter></ModalFooter>
         </ModalContent>
+        {/* delete class dialog box */}
         <DeleteClassAlert
           deleteAlertOpen={deleteAlertOpen}
           setDeleteAlertOpen={setDeleteAlertOpen}
+          deleteIndex={deleteIndex.current}
+          tempProfile={tempProfile}
+          setTempProfile={setTempProfile}
         />
       </Modal>
     </>

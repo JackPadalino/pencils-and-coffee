@@ -1,5 +1,5 @@
 /** Google Maps autocomplete component - was previously being
- * used in the EditProfileModal component for user profile
+ * used in the EditProfileModal component for user profile - NOT IN USE
  */
 
 import { useState, useEffect, useRef } from "react";

@@ -22,7 +22,7 @@ import "./profile.css";
 // user profile component - a user can view/edit their personal information
 // here
 const Profile = () => {
-  const [user, setUser] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalSize, setModalSize] = useState<string>("");
 
@@ -48,7 +48,7 @@ const Profile = () => {
         await getDocs(q).then((querySnapshot) => {
           const doc = querySnapshot.docs[0];
           const docInfo = { id: doc.id, ...doc.data() };
-          setUser(docInfo);
+          setUserProfile(docInfo);
         });
       }
     });
@@ -57,11 +57,11 @@ const Profile = () => {
 
   return (
     <Flex className="profileContainer">
-      {user && (
+      {userProfile && (
         <>
           <Flex className="profileHeaderContainer">
             <Flex className="profileHeaderSubContainer">
-              <Text>{user.name}</Text>
+              <Text>{userProfile.name}</Text>
               <Text
                 onClick={() => setModalOpen(!modalOpen)}
                 className="profileEditBtn"
@@ -69,12 +69,12 @@ const Profile = () => {
                 Edit
               </Text>
             </Flex>
-            <Text>{user.headline}</Text>
-            <Text>{user.location}</Text>
+            <Text>{userProfile.headline}</Text>
+            <Text>{userProfile.location}</Text>
           </Flex>
-          <Text>{user.about}</Text>
+          <Text>{userProfile.about}</Text>
           <Flex className="profileMyClasses">
-            {user.classes.map((eachClass: any, index: number) => (
+            {userProfile.classes.map((eachClass: any, index: number) => (
               <Flex key={index} className="profileEachClass">
                 <Text>{eachClass.subject}</Text>
                 <Text fontSize="xs">Grade: {eachClass.grade}</Text>
@@ -82,8 +82,8 @@ const Profile = () => {
             ))}
           </Flex>
           <EditProfileModal
-            user={user}
-            setUser={setUser}
+            userProfile={userProfile}
+            setUserProfile={setUserProfile}
             modalOpen={modalOpen}
             setModalOpen={setModalOpen}
             modalSize={modalSize}

@@ -1,4 +1,11 @@
-import { useRef } from "react";
+import {
+  useRef,
+  useState,
+  ChangeEvent,
+  FormEvent,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -14,10 +21,28 @@ import "./deleteclassalert.css";
 type props = {
   deleteAlertOpen: boolean;
   setDeleteAlertOpen: (deleteAlertOpen: boolean) => void;
+  deleteIndex: number;
+  tempProfile: any;
+  setTempProfile: Dispatch<SetStateAction<any | null>>;
 };
 
-const DeleteClassAlert = ({ deleteAlertOpen, setDeleteAlertOpen }: props) => {
+const DeleteClassAlert = ({
+  deleteAlertOpen,
+  setDeleteAlertOpen,
+  deleteIndex,
+  tempProfile,
+  setTempProfile,
+}: props) => {
   const cancelRef = useRef(null);
+
+  const handleDeleteClass = () => {
+    if (deleteIndex >= 0 && deleteIndex < tempProfile.classes.length) {
+      tempProfile.classes.splice(deleteIndex, 1);
+      setTempProfile({ ...tempProfile, classes: tempProfile.classes });
+    }
+    setDeleteAlertOpen(!deleteAlertOpen);
+  };
+
   return (
     <>
       <AlertDialog
@@ -41,11 +66,7 @@ const DeleteClassAlert = ({ deleteAlertOpen, setDeleteAlertOpen }: props) => {
               <Button onClick={() => setDeleteAlertOpen(!deleteAlertOpen)}>
                 Cancel
               </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => setDeleteAlertOpen(!deleteAlertOpen)}
-                ml={3}
-              >
+              <Button colorScheme="red" onClick={handleDeleteClass} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>
