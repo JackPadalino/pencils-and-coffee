@@ -1,6 +1,7 @@
 import {
   useRef,
   useState,
+  useEffect,
   ChangeEvent,
   FormEvent,
   Dispatch,
@@ -12,6 +13,8 @@ import { IoCloseOutline } from "react-icons/io5";
 import { db } from "../../../firebase";
 import { UserProfile } from "../../Types";
 import DeleteClassAlert from "./DeleteClassAlert";
+
+import useMousePosition from "./useMousePosition";
 
 import {
   Flex,
@@ -79,6 +82,36 @@ props) => {
 
   // variables for adding a new class
   const [showAddClassForm, setShowAddClassForm] = useState<boolean>(false);
+
+  // finding mouse position
+  const mousePosition = useMousePosition(); // Assuming this is a custom hook
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
+  const [mouseDistance, setMouseDistance] = useState<number>(0);
+
+  const euclideanDistance = (point1: any, point2: any) => {
+    const x1 = point1.x;
+    const y1 = point1.y;
+    const x2 = point2.x;
+    const y2 = point2.y;
+
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  };
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      const { left, right, top, bottom } =
+        buttonRef.current.getBoundingClientRect();
+      const centerX = 0.5 * (right - left) + left;
+      const centerY = 0.5 * (bottom - top) + top;
+      setButtonPosition({ x: centerX, y: centerY });
+    }
+  }, [buttonRef.current]);
+
+  useEffect(() => {
+    const distance = euclideanDistance(mousePosition, buttonPosition);
+    setMouseDistance(distance);
+  }, [mousePosition.x, mousePosition.y]);
 
   // using the google maps places api to determine user's city from their zip code
   const getUserLocation = async (postalCode: string) => {
@@ -315,8 +348,15 @@ props) => {
                   ))}
                 </Flex>
               </Flex>
+              <Text>Button position</Text>
+              <Text>{`${buttonPosition.x}, ${buttonPosition.y}`}</Text>
+              <Text>Cursor position</Text>
+              <Text>{`${mousePosition.x}, ${mousePosition.y}`}</Text>
+              <Text>Cursor distance</Text>
+              <Text>{mouseDistance}</Text>
               <Button
                 type="submit"
+                ref={buttonRef}
                 isDisabled={Object.values(formErrors).some((error) => error)}
               >
                 Save changes
